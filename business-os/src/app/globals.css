@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-jarvis-bg text-jarvis-text antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34, 211, 238, 0.07), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 110%, rgba(34, 211, 238, 0.04), transparent);
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #123047; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #1d4a68; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+::selection { background: rgba(34, 211, 238, 0.3); }
+
+/* ── Overlay global: scanlines + barra de escaneo ─────────────── */
+
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(3, 10, 18, 0.18) 3px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+.scanbar {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 90px;
+  z-index: 99;
+  background: linear-gradient(to bottom, transparent, rgba(34, 211, 238, 0.025), transparent);
+  animation: scanmove 9s linear infinite;
+}
+
+/* ── Panel HUD: esquinas recortadas + glassmorphism + glow ────── */
+
+.hud-panel {
+  position: relative;
+  background: linear-gradient(160deg, rgba(13, 26, 42, 0.75), rgba(6, 12, 22, 0.90));
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 0 26px rgba(34, 211, 238, 0.03);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-panel:hover {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(34, 211, 238, 0.08);
+  transform: translateY(-2px);
+}
+
+.hud-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, rgba(34, 211, 238, 0.55), transparent 60%);
+}
+
+.hud-corner {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(34, 211, 238, 0.6);
+}
+
+/* ── Texto y detalles ─────────────────────────────────────────── */
+
+.glow-text { text-shadow: 0 0 12px rgba(34, 211, 238, 0.55); }
+.glow-amber { text-shadow: 0 0 12px rgba(251, 191, 36, 0.5); }
+
+.hud-label {
+  @apply font-mono text-[10px] uppercase tracking-[0.25em] text-jarvis-dim;
+}
+
+.hud-input {
+  @apply w-full border border-jarvis-line bg-black/40 px-3 py-2 font-mono text-sm text-jarvis-text placeholder-jarvis-dim/60 outline-none transition;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.hud-input:focus {
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.12);
+}
+
+/* Cursor de terminal */
+.caret::after {
+  content: '▮';
+  margin-left: 2px;
+  color: #22d3ee;
+  animation: blink 1s step-end infinite;
+}
+
+/* Retícula decorativa del núcleo */
+.core-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+  mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+}
+
+/* ── Esfera holográfica 3D ────────────────────────────────────── */
+
+.sphere-scene {
+  perspective: 900px;
+}
+
+.sphere-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  animation: sphereSpin 16s linear infinite;
+}
+
+@keyframes sphereSpin {
+  0% { transform: rotateX(18deg) rotateY(0deg); }
+  100% { transform: rotateX(18deg) rotateY(360deg); }
+}
+
+.sphere-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.08) inset;
+}
+
+.sphere-core-glow {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 38%, rgba(215, 240, 250, 0.95), rgba(103, 232, 249, 0.55) 22%, rgba(34, 211, 238, 0.22) 48%, transparent 72%);
+  filter: blur(2px);
+  animation: coreBreath 3.2s ease-in-out infinite;
+}
+
+@keyframes coreBreath {
+  0%, 100% { opacity: 0.75; transform: scale(0.96); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+.sphere-halo {
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 52%, rgba(34, 211, 238, 0.12) 66%, transparent 78%);
+  animation: coreBreath 4.5s ease-in-out infinite reverse;
+}
+
+.sphere-orbit-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px;
+  border-radius: 50%;
+  background: #67e8f9;
+  box-shadow: 0 0 8px #22d3ee, 0 0 16px rgba(34, 211, 238, 0.6);
+  animation: orbitDot linear infinite;
+}
+
+@keyframes orbitDot {
+  0% { transform: rotate(0deg) translateX(var(--orbit-r)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--orbit-r)) rotate(-360deg); }
+}
+
+.sphere-equator {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  border: 1px dashed rgba(34, 211, 238, 0.35);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: ringspin 12s linear infinite;
+}
+
+/* ── Ticker de actividad (marquesina inferior) ─────────────────── */
+
+.ticker-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.ticker {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: tickerScroll 40s linear infinite;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.prose-bo h1, .prose-bo h2, .prose-bo h3 { @apply mb-2 mt-4 font-title font-semibold uppercase tracking-wider text-jarvis-text; }
+.prose-bo h1 { @apply text-xl; }
+.prose-bo h2 { @apply text-lg; }
+.prose-bo p, .prose-bo li { @apply text-sm leading-relaxed text-jarvis-text/80; }
+.prose-bo ul { @apply my-2 list-disc pl-5; }
+.prose-bo strong { @apply text-jarvis-glow; }

@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+@import 'highlight.js/styles/github-dark-dimmed.css';
+
+/* Override hljs background so code bubbles control their own bg */
+.hljs { background: transparent !important; }
+
+/* iOS PWA only: force web view to extend behind home indicator.
+   Scoped to standalone so it doesn't affect desktop browsers. */
+@media (display-mode: standalone) {
+  html {
+    min-height: calc(100% + env(safe-area-inset-top));
+  }
+}
+
+html, body {
+  background-color: #0a0a0f;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Safe-area bottom spacer (home indicator on notched iPhones) */
+.safe-area-spacer {
+  height: env(safe-area-inset-bottom, 0px);
+}
+
+/* Kill spacer when keyboard is open — CSS :has() reacts instantly to focus,
+   no JS timing delay. The .keyboard-open class is a fallback. */
+.keyboard-open .safe-area-spacer,
+:root:has(textarea:focus, input:focus, [contenteditable]:focus) .safe-area-spacer {
+  height: 0px !important;
+}
+
+/* Global audio bar entrance */
+@keyframes audioBarIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark scrollbars — matches the app's dark theme */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255 255 255 / 0.1) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}

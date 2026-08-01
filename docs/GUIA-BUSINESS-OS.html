@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Paso a Paso del Business OS — De cero a "es mío"</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --border:#2a3344;
+    --text:#e6edf3; --muted:#9aa7b5; --accent:#58a6ff; --accent2:#3fb950;
+    --warn:#d29922; --code:#1f2733; --chip:#21304a;
+    --radius:12px; --maxw:880px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:16px;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Layout */
+  .wrap{display:flex; max-width:1240px; margin:0 auto; gap:0}
+  .sidebar{
+    width:300px; flex-shrink:0; position:sticky; top:0; height:100vh;
+    overflow-y:auto; padding:28px 18px; border-right:1px solid var(--border);
+    background:var(--panel);
+  }
+  .content{flex:1; min-width:0; padding:40px 48px; max-width:var(--maxw); margin:0 auto}
+
+  /* Sidebar */
+  .brand{font-weight:700; font-size:15px; letter-spacing:.3px; margin-bottom:4px}
+  .brand .em{font-size:22px}
+  .sub{color:var(--muted); font-size:12.5px; margin-bottom:22px}
+  .toc a{
+    display:block; color:var(--muted); font-size:13.5px; padding:6px 10px;
+    border-radius:8px; border-left:2px solid transparent; margin:1px 0;
+  }
+  .toc a:hover{background:var(--panel2); color:var(--text); text-decoration:none}
+  .toc a.lvl2{padding-left:24px; font-size:12.5px}
+  .toc .grp{
+    margin:16px 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:1px;
+    color:#6b7785; padding-left:10px; font-weight:700;
+  }
+
+  /* Headings */
+  h1{font-size:30px; line-height:1.25; margin:0 0 8px}
+  h2{
+    font-size:23px; margin:46px 0 14px; padding-top:14px;
+    border-top:1px solid var(--border); scroll-margin-top:20px;
+  }
+  h2.phase{
+    color:#fff; background:linear-gradient(135deg,#1f6feb33,#3fb95022);
+    border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 20px; margin-top:48px;
+  }
+  h3{font-size:18px; margin:30px 0 10px; color:var(--text); scroll-margin-top:20px}
+  h4{font-size:15px; margin:20px 0 8px; color:var(--muted)}
+
+  .lead{color:var(--muted); font-size:17px; border-left:3px solid var(--accent); padding:4px 0 4px 16px; margin:18px 0}
+  .meta{color:var(--muted); font-size:14px; margin-bottom:8px}
+
+  /* Code */
+  code{background:var(--code); padding:2px 6px; border-radius:5px; font-size:13.5px; font-family:"SF Mono",Consolas,Monaco,monospace; color:#a5d6ff}
+  pre{background:var(--code); border:1px solid var(--border); border-radius:10px; padding:16px; overflow-x:auto; margin:14px 0}
+  pre code{background:none; padding:0; color:#c9d1d9; display:block; line-height:1.55}
+
+  /* Tables */
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px}
+  th,td{border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top}
+  th{background:var(--panel2); font-weight:600}
+  tr:nth-child(even) td{background:#12161e}
+
+  /* Callouts */
+  .box{border-radius:10px; padding:14px 16px; margin:16px 0; border:1px solid var(--border); font-size:14.5px}
+  .box.tip{background:#13261a; border-color:#1f5132}
+  .box.warn{background:#2a210d; border-color:#5c4410}
+  .box.lock{background:#1a1430; border-color:#3a2d6b}
+  .box.check{background:#0f2233; border-color:#1a4d6e}
+  .box b{color:var(--text)}
+
+  blockquote{margin:16px 0; padding:10px 16px; border-left:3px solid var(--accent2); background:var(--panel); border-radius:0 8px 8px 0; color:var(--text)}
+
+  ul,ol{padding-left:22px}
+  li{margin:6px 0}
+  input[type=checkbox]{margin-right:6px; transform:scale(1.15)}
+
+  hr{border:none; border-top:1px solid var(--border); margin:36px 0}
+  .foot{color:var(--muted); font-size:13px; font-style:italic; text-align:center; margin-top:30px}
+
+  /* Top progress bar */
+  #bar{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:50; transition:width .1s}
+
+  /* Mobile */
+  .menu-btn{display:none}
+  @media(max-width:920px){
+    .sidebar{position:fixed; left:-320px; z-index:40; transition:left .25s; box-shadow:0 0 40px #000}
+    .sidebar.open{left:0}
+    .content{padding:64px 20px 40px}
+    .menu-btn{
+      display:block; position:fixed; top:12px; left:12px; z-index:45;
+      background:var(--accent); color:#06101f; border:none; border-radius:8px;
+      padding:8px 14px; font-weight:700; font-size:14px; cursor:pointer;
+    }
+    h1{font-size:25px}
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<button class="menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Índice</button>
+<div class="wrap">
+  <nav class="sidebar">
+    <div class="brand"><span class="em">🧭</span> Paso a Paso · Business OS</div>
+    <div class="sub">De cero a "es mío"</div>
+    <div class="toc">
+      <a href="#intro">¿Qué vas a tener?</a>
+      <a href="#requisitos">Requisitos previos</a>
+      <div class="grp">Paso 1 · Configuración</div>
+      <a href="#clona" class="lvl2">Clonar el repo</a>
+      <a href="#facil" class="lvl2">La forma fácil (IA)</a>
+      <a href="#manual" class="lvl2">La forma manual</a>
+      <div class="grp">Paso 2 · Hacerlo tuyo</div>
+      <a href="#claudemd" class="lvl2">Personalizar CLAUDE.md</a>
+      <a href="#telegram" class="lvl2">Bot de Telegram</a>
+      <a href="#conectar" class="lvl2">Conectar Mission Control</a>
+      <a href="#finanzas" class="lvl2">Adaptar Finance OS</a>
+      <div class="grp">Paso 3 · El día a día</div>
+      <a href="#servicio" class="lvl2">Servicio en background</a>
+      <a href="#cron" class="lvl2">Tareas programadas</a>
+      <a href="#kanban" class="lvl2">Tablero Kanban</a>
+      <a href="#memoria" class="lvl2">La memoria</a>
+      <a href="#flujo" class="lvl2">Día típico</a>
+      <div class="grp">Cierre</div>
+      <a href="#ayuda">Si te atascas</a>
+      <a href="#checklist">Checklist final</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <h1>🧭 Guía Paso a Paso del Business OS</h1>
+    <p class="lead">Guía paso a paso para montar <b>tu propio Business OS</b> y adaptarlo a tu negocio. Sin teoría de relleno. Haces lo que dice, en orden, y funciona.</p>
+    <p class="meta">⏱️ Tiempo estimado: 15–30 minutos la primera vez.</p>
+
+    <h2 id="intro">0. ¿Qué vas a tener al final?</h2>
+    <p>Tu propio sistema operativo de negocio con IA. Son <b>3 piezas</b> que funcionan juntas o por separado. <b>No necesitas las 3.</b> Empieza por la que te haga falta:</p>
+    <table>
+      <tr><th>Pieza</th><th>Qué es</th><th>Dónde vive</th><th>¿La necesito?</th></tr>
+      <tr><td><b>Mission Control</b></td><td>Panel web (Kanban, chat IA, actividad, calendario, cron). Se instala en el móvil como app (PWA).</td><td>Navegador / Vercel</td><td>Si quieres un dashboard visual para mandar tareas y ver qué pasa.</td></tr>
+      <tr><td><b>Agent Server</b></td><td>Tu agente de IA permanente. Le hablas por Telegram y ejecuta el Claude Code real en tu máquina, con memoria y voz.</td><td>Tu ordenador</td><td>Si quieres hablar con tu IA desde el móvil y que recuerde quién eres.</td></tr>
+      <tr><td><b>Finance OS</b></td><td>Gestor de finanzas (ingresos, gastos, recurrentes, reportes, un "CFO" con IA).</td><td>Navegador / Vercel</td><td>Si quieres llevar tus números.</td></tr>
+    </table>
+    <div class="box tip">💡 <b>Regla de oro para empezar:</b> elige <b>una sola pieza</b> la primera vez. Cuando la tengas viva, añades las demás. Intentar las tres a la vez es la causa nº1 de atascarse.</div>
+
+    <h2 id="requisitos">0.1 — Lo que necesitas antes de empezar</h2>
+    <p>Marca cada casilla antes de seguir. Si falta una, párate y resuélvela:</p>
+    <ul>
+      <li><input type="checkbox"> <b>Node.js 20+.</b> Compruébalo: <code>node -v</code>. Si no, instálalo desde <a href="https://nodejs.org" target="_blank">nodejs.org</a>.</li>
+      <li><input type="checkbox"> <b>Git instalado.</b> Compruébalo: <code>git -v</code>.</li>
+      <li><input type="checkbox"> <b>Claude Code CLI</b> con sesión iniciada (solo para Agent Server). Compruébalo: escribe <code>claude</code>.</li>
+      <li><input type="checkbox"> <b>Cuenta en Supabase</b> (gratis) — para Mission Control y/o Finance OS. <a href="https://supabase.com" target="_blank">supabase.com</a></li>
+      <li><input type="checkbox"> <b>Cuenta de Telegram</b> (solo para Agent Server). Crear el bot tarda 2 minutos.</li>
+    </ul>
+    <div class="box tip">🪟 <b>Nota Windows:</b> todo funciona. Lo único que cambia es el servicio en segundo plano (se hace con PM2 en vez de launchd/systemd). Lo verás en el Paso 3.</div>
+
+    <h2 class="phase" id="clona">PASO 1 — Configuración inicial</h2>
+    <h3>1.1 — Clona el repositorio</h3>
+    <p>Abre una terminal <b>en la carpeta donde quieras guardar el proyecto</b> y ejecuta:</p>
+    <pre><code>git clone &lt;URL-DEL-REPO-BUSINESS-OS&gt; business-os
+cd business-os</code></pre>
+    <div class="box tip">📁 <b>¿Dónde ponerlo?</b> Donde sueles tener tus proyectos. No en el Escritorio ni en Descargas. Una ruta <b>sin espacios ni acentos</b> es lo más seguro (ej: <code>C:\proyectos\business-os</code> o <code>~/proyectos/business-os</code>).</div>
+
+    <h3 id="facil">1.2 — La forma fácil: deja que la IA te instale</h3>
+    <p>Aquí está el truco que casi nadie usa. El proyecto trae un <b>mega-prompt de instalación</b> que convierte a Claude Code en tu asistente de setup. Te entrevista, crea la base de datos, configura las claves y te deja todo funcionando.</p>
+    <pre><code># 1. Abre Claude Code dentro de la carpeta del proyecto
+claude</code></pre>
+    <p>2. Dile literalmente esto:</p>
+    <blockquote>"Lee <code>docs/SETUP_PROMPT.md</code> y configúrame el Business OS paso a paso."</blockquote>
+    <p>A partir de ahí, <b>Claude te guía</b>. Te preguntará qué piezas quieres, te pedirá las claves una a una y ejecutará la instalación. Si te atascas, <b>le preguntas dentro del mismo chat</b> ("¿de dónde saco el token de Telegram?") y te lo explica sin perder el hilo.</p>
+    <div class="box check">✅ <b>Esta es la vía recomendada.</b> El resto de pasos de abajo son por si prefieres hacerlo a mano o entender qué pasa por dentro.</div>
+
+    <h3 id="manual">1.3 — La forma manual (si quieres entenderlo todo)</h3>
+    <h4>A) Crea la base de datos en Supabase</h4>
+    <ol>
+      <li>Entra en <a href="https://supabase.com" target="_blank">supabase.com</a> y crea un proyecto nuevo (gratis).</li>
+      <li>Ve a <b>Settings → API</b> y copia 3 cosas: <b>Project URL</b>, <b>anon key</b> (pública) y <b>service_role key</b> (secreta — no la compartas).</li>
+      <li>Ve al <b>SQL Editor</b>.</li>
+      <li>Abre <code>docs/SETUP_PROMPT.md</code>: para <b>Mission Control</b> copia el SQL de la <b>Sección 3A</b>; para <b>Finance OS</b> el de la <b>Sección 3B</b>.</li>
+      <li>Pega ese SQL en Supabase y pulsa <b>Run</b>. Crea todas las tablas de golpe.</li>
+      <li>Verifica en <b>Table Editor</b> que aparecieron las tablas.</li>
+    </ol>
+    <div class="box check">🔎 <b>Checkpoint:</b> si ves las tablas listadas en el Table Editor, esta parte está hecha.</div>
+
+    <h4>B) Configura las variables de entorno (las "claves")</h4>
+    <p>Cada pieza tiene su archivo de configuración. Copias la plantilla y rellenas tus datos.</p>
+    <p><b>Mission Control:</b></p>
+    <pre><code>cd Mission-Control
+cp .env.example .env.local</code></pre>
+    <pre><code>NEXT_PUBLIC_SUPABASE_URL=&lt;tu Project URL&gt;
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;tu anon key&gt;
+SUPABASE_SERVICE_ROLE_KEY=&lt;tu service_role key&gt;
+ALLOWED_EMAILS=&lt;tu-email@ejemplo.com&gt;          # solo estos emails podrán entrar
+NEXT_PUBLIC_SITE_URL=http://localhost:3000</code></pre>
+    <p><b>Finance OS:</b></p>
+    <pre><code>cd finance-os
+cp .env.example .env.local</code></pre>
+    <pre><code>NEXT_PUBLIC_SUPABASE_URL=&lt;tu Project URL&gt;
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;tu anon key&gt;
+SUPABASE_SERVICE_ROLE_KEY=&lt;tu service_role key&gt;
+OPENROUTER_API_KEY=&lt;opcional, para el CFO con IA&gt;</code></pre>
+    <p><b>Agent Server:</b></p>
+    <pre><code>cd agent-server
+cp .env.example .env</code></pre>
+    <pre><code>TELEGRAM_BOT_TOKEN=&lt;lo obtienes en el Paso 2&gt;
+ALLOWED_CHAT_ID=&lt;lo rellenas tras el primer mensaje al bot&gt;
+SCHEDULER_TZ=Europe/Madrid                      # tu zona horaria
+# Opcionales (voz):
+GROQ_API_KEY=&lt;voz a texto, gratis en console.groq.com&gt;
+ELEVENLABS_API_KEY=&lt;respuestas habladas, gratis en elevenlabs.io&gt;
+ELEVENLABS_VOICE_ID=&lt;voz elegida en ElevenLabs&gt;</code></pre>
+    <div class="box lock">🔐 <b>Si conectas Mission Control + Agent Server:</b> ambos comparten el mismo secreto. En <code>Mission-Control/.env.local</code> pon <code>OPENCLAW_GATEWAY_TOKEN=...</code> y en <code>agent-server/.env</code> pon <code>MISSION_CONTROL_TOKEN=...</code> <b>con el mismo valor</b>. Genéralo: Mac/Linux <code>openssl rand -hex 32</code>; en Windows usa cualquier cadena larga al azar.</div>
+
+    <h4>C) Instala dependencias y arranca</h4>
+    <pre><code># Mission Control
+cd Mission-Control && npm install && npm run dev      # http://localhost:3000
+
+# Finance OS
+cd finance-os && npm install && npm run dev           # http://localhost:3001
+
+# Agent Server
+cd agent-server && npm install && npm run dev</code></pre>
+    <div class="box check">🔎 <b>Checkpoint:</b> Mission Control debe mostrar login en <code>localhost:3000</code>. Entra con el email de <code>ALLOWED_EMAILS</code>.</div>
+
+    <h2 class="phase" id="claudemd">PASO 2 — Hacerlo TUYO</h2>
+    <p>Aquí el sistema deja de ser "una demo" y pasa a ser <b>tu</b> Business OS.</p>
+    <h3>2.1 — El cerebro: personaliza <code>CLAUDE.md</code></h3>
+    <p>Este es <b>el archivo más importante</b>. Es el "prompt de sistema" de tu IA: se carga cada vez que arranca y define quién eres, qué haces y cómo quieres que te trate. Está en la raíz del proyecto.</p>
+    <ol>
+      <li><b>Tu Rol</b> — qué quieres que sea la IA: ¿socio estratégico? ¿gestor de operaciones? ¿programador?</li>
+      <li><b>El Ecosistema</b> — borra del diagrama las piezas que no uses.</li>
+      <li><b>Comandos clave</b> — quita los comandos de las piezas que no instalaste.</li>
+      <li><b>Reglas</b> — tu estilo: ¿directo? ¿con datos siempre? ¿en español?</li>
+    </ol>
+    <div class="box tip">💡 <b>Cuanto más contexto le des, más útil es.</b> Cuéntale tu negocio, tus valores, tus herramientas, tus manías. Es lo que diferencia un chatbot genérico de <b>tu</b> copiloto.</div>
+    <p><b>Ejemplo del bloque "Tu Rol":</b></p>
+    <pre><code>## Tu Rol
+Eres mi jefe de operaciones. Llevo una [tu negocio]. Cada mañana
+revisas mis tareas pendientes, me señalas la de mayor impacto y me
+dices la verdad aunque no me guste. Hablas en español, directo, sin rodeos.</code></pre>
+
+    <h3 id="telegram">2.2 — Conecta el Bot de Telegram (Agent Server)</h3>
+    <p>Esto te da una IA en el bolsillo. (Salta este punto si no usas Agent Server.)</p>
+    <ol>
+      <li>Abre Telegram y busca <b>@BotFather</b>.</li>
+      <li>Envía <code>/newbot</code>.</li>
+      <li>Ponle un nombre (ej: "Mi Asistente").</li>
+      <li>Ponle un usuario que <b>termine en <code>bot</code></b> (ej: <code>mi_asistente_bot</code>).</li>
+      <li>BotFather te da un <b>token</b> tipo <code>1234567890:ABCdef...</code>. Cópialo.</li>
+      <li>Pégalo en <code>agent-server/.env</code> como <code>TELEGRAM_BOT_TOKEN</code>.</li>
+    </ol>
+    <p><b>Conseguir tu Chat ID:</b></p>
+    <ol>
+      <li>Arranca: <code>cd agent-server && npm run dev</code>.</li>
+      <li>En Telegram, envía <code>/chatid</code> a tu bot.</li>
+      <li>El bot responde con un número (tu chat ID).</li>
+      <li>Pégalo en <code>agent-server/.env</code> como <code>ALLOWED_CHAT_ID</code>.</li>
+      <li>Reinicia el servidor.</li>
+    </ol>
+    <div class="box lock">🔒 <b>Por qué importa <code>ALLOWED_CHAT_ID</code>:</b> el bot <b>solo</b> te responde a ti. Cualquier otra persona es rechazada. Es tu candado de seguridad.</div>
+    <div class="box check">🔎 <b>Checkpoint:</b> escríbele "hola" a tu bot. Si contesta, está vivo. Con voz activada, mándale una nota de voz: debería transcribirla y responder.</div>
+
+    <h3 id="conectar">2.3 — Conecta Mission Control con tu agente</h3>
+    <p>Para mandar órdenes a tu IA desde el dashboard web (no solo desde Telegram):</p>
+    <ol>
+      <li>Confirma que <code>OPENCLAW_GATEWAY_TOKEN</code> (Mission-Control) y <code>MISSION_CONTROL_TOKEN</code> (agent-server) <b>tienen el mismo valor</b>.</li>
+      <li>En <code>Mission-Control/.env.local</code>: <code>AGENT_URL=http://localhost:3099</code>.</li>
+      <li>Arranca ambos (<code>npm run dev</code> en cada carpeta).</li>
+      <li>Dashboard → pestaña <b>Chat</b> → escribe algo. La respuesta viene de tu Agent Server.</li>
+    </ol>
+
+    <h3 id="finanzas">2.4 — Adapta Finance OS a tus cuentas</h3>
+    <ol>
+      <li>Edita <code>finance-os/src/features/finances/types/index.ts</code> (el array <code>CUENTAS</code>) y pon tus cuentas reales.</li>
+      <li>Actualiza la tabla <code>cuentas</code> en Supabase con esos mismos nombres.</li>
+    </ol>
+
+    <h2 class="phase" id="servicio">PASO 3 — Sacarle el jugo en el día a día</h2>
+    <h3>3.1 — Que arranque solo (servicio en segundo plano)</h3>
+    <p>Para que tu agente esté disponible siempre, sin arrancarlo a mano:</p>
+    <p>🪟 <b>Windows (PM2):</b></p>
+    <pre><code>npm install -g pm2
+cd agent-server
+npm run build
+pm2 start dist/index.js --name agent-server
+pm2 save
+pm2 startup        # sigue las instrucciones que imprime</code></pre>
+    <p>🍎 <b>macOS (launchd) / 🐧 Linux (systemd):</b> pídeselo a Claude Code: <i>"Instálame el Agent Server como servicio en segundo plano para que arranque al encender el ordenador"</i>. Genera el archivo correcto y lo activa (detalles en <code>docs/SETUP_PROMPT.md</code>, Sección 8).</p>
+    <div class="box check">🔎 <b>Comprobar que sigue vivo:</b> <code>cd agent-server && npx tsx scripts/status.ts</code></div>
+
+    <h3 id="cron">3.2 — Tareas programadas (cron): tu IA trabaja sola</h3>
+    <p>Tu agente ejecuta tareas a solas y te manda el resultado por Telegram. Ej: resumen cada mañana, revisión de salud los lunes.</p>
+    <pre><code>cd agent-server
+npx tsx src/schedule-cli.ts create "Hazme un resumen de mis tareas pendientes y dime la más importante" "0 9 * * *" TU_CHAT_ID</code></pre>
+    <p><code>"0 9 * * *"</code> = todos los días a las 9:00 (formato cron estándar).</p>
+    <pre><code>npx tsx src/schedule-cli.ts list           # ver todas
+npx tsx src/schedule-cli.ts run &lt;id&gt;       # ejecutar ya
+npx tsx src/schedule-cli.ts pause &lt;id&gt;     # pausar
+npx tsx src/schedule-cli.ts resume &lt;id&gt;    # reanudar</code></pre>
+
+    <h3 id="kanban">3.3 — El tablero Kanban como centro de mando</h3>
+    <ul>
+      <li>Creas tareas y las arrastras entre columnas (Inbox → En progreso → Revisión → Hecho).</li>
+      <li>Puedes asignárselas a tu agente.</li>
+      <li>La pestaña <b>Actividad</b> muestra en tiempo real cada conversación de tu agente (incluidas las del cron).</li>
+    </ul>
+
+    <h3 id="memoria">3.4 — La memoria: por qué mejora con el tiempo</h3>
+    <p>Tu Agent Server <b>aprende quién eres</b>. Cuando dices "mi empresa…", "prefiero…", "recuerda que…", lo guarda como memoria a largo plazo. En cada mensaje busca recuerdos relevantes y los inyecta antes de responder. Cuanto más lo usas, mejor te conoce. Solo háblale con naturalidad.</p>
+    <blockquote>🆕 ¿Quieres una conversación limpia (sin el contexto anterior)? Envía <code>/newchat</code> al bot.</blockquote>
+
+    <h3 id="flujo">3.5 — Flujo de trabajo recomendado (el día típico)</h3>
+    <ol>
+      <li><b>Mañana:</b> el cron de las 9:00 te manda el resumen por Telegram. Lees, decides.</li>
+      <li><b>Durante el día:</b> le hablas al bot por voz o texto para crear tareas, pedir análisis, redactar. Desde el móvil, en cualquier sitio.</li>
+      <li><b>Planificación:</b> abres Mission Control, organizas el Kanban, miras la actividad.</li>
+      <li><b>Finanzas:</b> registras gastos en Finance OS y le pides al CFO con IA que analice tus patrones.</li>
+      <li><b>El sistema mejora solo:</b> cada vez te conoce más y necesitas explicarle menos.</li>
+    </ol>
+
+    <hr>
+    <h2 id="ayuda">🆘 Si te atascas</h2>
+    <p><b>La mejor herramienta de soporte ya la tienes instalada: Claude Code.</b> Ábrelo dentro del proyecto y pregunta directamente:</p>
+    <ul>
+      <li><i>"El build falló con este error: [pega el error]. ¿Qué hago?"</i></li>
+      <li><i>"¿De dónde saco la service_role key de Supabase?"</i></li>
+      <li><i>"Quiero añadir una tarea programada que haga X cada lunes."</i></li>
+      <li><i>"Quita Finance OS de mi instalación, solo quiero Mission Control."</i></li>
+    </ul>
+    <p>El proyecto está diseñado para que <b>la propia IA sea tu soporte técnico</b>. No estás solo a las 11 de la noche peleándote con un error.</p>
+
+    <h2 id="checklist">✅ Checklist final</h2>
+    <ul>
+      <li><input type="checkbox"> Repo clonado en una ruta limpia.</li>
+      <li><input type="checkbox"> Base de datos creada en Supabase (tablas visibles).</li>
+      <li><input type="checkbox"> <code>.env</code> de cada pieza relleno.</li>
+      <li><input type="checkbox"> <code>CLAUDE.md</code> personalizado con tu contexto.</li>
+      <li><input type="checkbox"> (Opcional) Bot de Telegram respondiendo solo a ti.</li>
+      <li><input type="checkbox"> (Opcional) Mission Control y Agent Server conectados.</li>
+      <li><input type="checkbox"> (Opcional) Servicio en segundo plano activo.</li>
+      <li><input type="checkbox"> (Opcional) Primera tarea programada creada.</li>
+    </ul>
+    <div class="box check"><b>Si marcaste lo esencial, ya tienes tu propio Business OS. El resto es adaptarlo a ti.</b></div>
+
+    <p class="foot">Guía Paso a Paso del Business OS · "De la demo a 'es mío' en una tarde."</p>
+  </main>
+</div>
+<script>
+  // progress bar + active TOC link
+  const bar=document.getElementById('bar');
+  const links=[...document.querySelectorAll('.toc a')];
+  const targets=links.map(a=>document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+  function onScroll(){
+    const h=document.documentElement;
+    const sc=h.scrollTop/(h.scrollHeight-h.clientHeight);
+    bar.style.width=(sc*100)+'%';
+    let cur=null;
+    for(const t of targets){ if(t.getBoundingClientRect().top<120) cur=t; }
+    links.forEach(a=>a.style.background='');
+    if(cur){ const l=links.find(a=>a.getAttribute('href')==='#'+cur.id); if(l) l.style.background='var(--panel2)'; }
+  }
+  document.addEventListener('scroll',onScroll); onScroll();
+  // close mobile menu on link click
+  document.querySelectorAll('.toc a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.sidebar').classList.remove('open')));
+</script>
+</body>
+</html>

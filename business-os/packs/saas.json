@@ -1,0 +1,22 @@
+{
+  "empresa": "SaaS B2B [Nombre de la Empresa]",
+  "resumen": "Startup de software as a service enfocada en negocios (B2B), con modelo de suscripción recurrente mensual (MRR).",
+  "constitucion_md": "## Identidad\nSomos un SaaS B2B. Nuestra prioridad es el MRR, minimizar el Churn y aumentar el LTV de nuestros usuarios.\n\n## Misión del Business OS\nMonitorear la adopción, identificar clientes en riesgo de cancelación y automatizar notificaciones de retención y facturación.\n\n## Principios de razonamiento\n1. Siempre evalúa cómo una decisión afecta la Tasa de Retención (Churn).\n2. El CAC (Costo de Adquisición) nunca debe superar 1/3 del LTV (Life Time Value).\n3. Prioriza el autoservicio sobre el soporte manual.\n\n## Límites\nNo conceder reembolsos mayores a $1,000 sin aprobación manual del fundador.\nNo aplicar descuentos mayores al 20% en suscripciones anuales.\n\n## Tono\nProfesional, tecnológico, conciso y proactivo.",
+  "entidades": [
+    { "tipo": "persona", "nombre": "Soporte Nivel 1", "descripcion": "Equipo encargado de tickets técnicos básicos y escalaciones." },
+    { "tipo": "producto", "nombre": "Suscripción PRO", "descripcion": "Tier principal del producto. $99/mes." },
+    { "tipo": "producto", "nombre": "Suscripción Enterprise", "descripcion": "Tier para grandes volúmenes. Custom pricing." },
+    { "tipo": "proceso", "nombre": "Onboarding de Usuario", "descripcion": "Secuencia de 5 correos automatizados en 14 días para asegurar adopción." }
+  ],
+  "kpis": [
+    { "nombre": "MRR (Ingreso Recurrente Mensual)", "unidad": "USD", "objetivo": 10000, "direccion": "subir", "valor_actual": null },
+    { "nombre": "Churn Rate (Tasa de Cancelación)", "unidad": "%", "objetivo": 3, "direccion": "bajar", "valor_actual": null },
+    { "nombre": "CAC (Costo de Adquisición de Cliente)", "unidad": "USD", "objetivo": 200, "direccion": "bajar", "valor_actual": null },
+    { "nombre": "LTV (Valor del Tiempo de Vida)", "unidad": "USD", "objetivo": 2000, "direccion": "subir", "valor_actual": null },
+    { "nombre": "Usuarios Activos Diarios (DAU)", "unidad": "usuarios", "objetivo": null, "direccion": "subir", "valor_actual": null }
+  ],
+  "crons": [
+    { "nombre": "alerta-churn-riesgo", "cron": "0 9 * * *", "instruccion": "Revisa los registros de actividad de usuarios; si algún cliente Enterprise no se ha logueado en 7 días, envía alerta urgente a Soporte Nivel 1." },
+    { "nombre": "reporte-mrr-semanal", "cron": "0 8 * * 1", "instruccion": "Genera el reporte de crecimiento del MRR vs Churn de la semana pasada y compártelo en el canal de Telegram." }
+  ]
+}

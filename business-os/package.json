@@ -1,0 +1,37 @@
+{
+  "name": "business-os",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Business Operating System — el sistema operativo inteligente de tu empresa",
+  "scripts": {
+    "dev": "next dev --turbopack -p 3010",
+    "build": "next build",
+    "start": "next start -p 3010",
+    "db:setup": "tsx scripts/db-setup.ts",
+    "bot": "tsx bot/bot.ts",
+    "google:auth": "tsx scripts/google-auth.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "latest",
+    "cron-parser": "^4.9.0",
+    "googleapis": "^173.0.0",
+    "grammy": "^1.30.0",
+    "next": "^16.0.0",
+    "pg": "^8.13.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.0",
+    "dotenv": "^16.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

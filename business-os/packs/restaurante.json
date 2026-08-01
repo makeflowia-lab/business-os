@@ -1,0 +1,22 @@
+{
+  "empresa": "Restaurante [Nombre]",
+  "resumen": "Restaurante físico de comida con operación diaria, turnos de empleados, inventario perecedero y reservas.",
+  "constitucion_md": "## Identidad\nSomos un negocio gastronómico enfocado en la experiencia del comensal y la rotación eficiente de mesas.\n\n## Misión del Business OS\nMonitorear la ocupación, optimizar la merma (desperdicio) de alimentos, cuadrar cajas diarias y gestionar el cronograma de staff.\n\n## Principios de razonamiento\n1. La merma nunca debe superar el 5% de las compras semanales.\n2. La velocidad de salida de cocina (Ticket Time) es crítica: debe ser < 20 minutos.\n3. El inventario fresco manda: sugiere promociones si hay sobrestock de perecederos.\n\n## Límites\nNo confirmar reservas VIP ni eventos de más de 10 personas sin validación del gerente.\nLas cancelaciones de último minuto con pago por adelantado requieren revisión manual.\n\n## Tono\nPráctico, hospitalario y orientado a la acción inmediata.",
+  "entidades": [
+    { "tipo": "persona", "nombre": "Maitre", "descripcion": "Encargado de reservas y acomodo de sala." },
+    { "tipo": "persona", "nombre": "Chef Ejecutivo", "descripcion": "Responsable de pedidos a proveedores y menú." },
+    { "tipo": "producto", "nombre": "Menú Degustación", "descripcion": "Plato estrella de la casa. Mayor margen de ganancia." },
+    { "tipo": "proveedor", "nombre": "Distribuidora de Verduras", "descripcion": "Entrega todos los martes y viernes." }
+  ],
+  "kpis": [
+    { "nombre": "Ticket Promedio", "unidad": "USD", "objetivo": 45, "direccion": "subir", "valor_actual": null },
+    { "nombre": "Porcentaje de Merma", "unidad": "%", "objetivo": 4, "direccion": "bajar", "valor_actual": null },
+    { "nombre": "Ocupación de Sala", "unidad": "%", "objetivo": 85, "direccion": "subir", "valor_actual": null },
+    { "nombre": "Tiempo Promedio de Cocina", "unidad": "minutos", "objetivo": 18, "direccion": "bajar", "valor_actual": null },
+    { "nombre": "Quejas y Devoluciones", "unidad": "incidentes", "objetivo": 0, "direccion": "bajar", "valor_actual": null }
+  ],
+  "crons": [
+    { "nombre": "cierre-de-caja-diario", "cron": "30 23 * * *", "instruccion": "Verifica que el reporte de ventas del TPV cuadre con el objetivo diario y envía el resumen financiero por Telegram." },
+    { "nombre": "alerta-merma-promocion", "cron": "0 10 * * 5", "instruccion": "Revisa los registros de inventario: si hay exceso de marisco perecedero, lanza instrucciones al Marketing Agent para publicar una historia de 'Plato Especial del Día' en Instagram." }
+  ]
+}

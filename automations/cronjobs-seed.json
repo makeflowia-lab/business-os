@@ -1,0 +1,120 @@
+{
+  "$comment": "Semilla de cronjobs del Business OS. La skill onboarding-empresa adapta prompts/horarios al negocio antes de sembrar. Sembrar con: cd agent-server && npx tsx scripts/seed-crons.ts. Horarios en SCHEDULER_TZ (.env). enabled:false = requiere una fuente de datos aún no conectada o decisión del piloto.",
+  "tasks": [
+    {
+      "id": "morning-briefing",
+      "schedule": "0 7 * * *",
+      "enabled": true,
+      "category": "inteligencia",
+      "prompt": "Ejecuta la skill morning-briefing (.claude/skills/morning-briefing/SKILL.md): lee context/01_ESTRATEGIA.md y context/03_DATOS.md, consulta las fuentes reales, y entrega el briefing del día en el formato de la skill. Si una fuente no está conectada, dilo sin inventar datos."
+    },
+    {
+      "id": "cierre-del-dia",
+      "schedule": "0 21 * * *",
+      "enabled": true,
+      "category": "inteligencia",
+      "prompt": "Cierre del día: resume en <150 palabras qué se completó hoy (tablero de Mission Control y resultados de crons), qué quedó pendiente, y deja preparada la prioridad de mañana según el foco semanal de context/01_ESTRATEGIA.md. Si detectas un aprendizaje relevante, añádelo fechado a context/04_APRENDIZAJES.md."
+    },
+    {
+      "id": "revision-semanal",
+      "schedule": "0 18 * * 0",
+      "enabled": true,
+      "category": "inteligencia",
+      "prompt": "Ejecuta la skill revision-semanal (.claude/skills/revision-semanal/SKILL.md): números de la semana, progreso de objetivos, auditoría de context/ y de crons, y propuesta de foco único para la próxima semana en el formato de la skill."
+    },
+    {
+      "id": "seguimiento-leads",
+      "schedule": "0 10 * * 1-5",
+      "enabled": true,
+      "category": "ventas",
+      "prompt": "Revisa la fuente de CRM/pipeline definida en context/03_DATOS.md. Lista prospectos sin respuesta hace más de 48h y propón para cada uno un siguiente paso concreto (borrador de mensaje incluido, respetando el tono de context/02_REGLAS_DE_ORO.md). NO envíes nada: deja los borradores para aprobación del piloto. Si la fuente aún no existe, repórtalo en una línea y propón cómo crearla."
+    },
+    {
+      "id": "finanzas-semanales",
+      "schedule": "0 8 * * 1",
+      "enabled": true,
+      "category": "finanzas",
+      "prompt": "Informe financiero semanal: consulta Finance OS y la fuente de ingresos de context/03_DATOS.md. Resume ingresos, gastos, delta vs. semana anterior y cualquier gasto inusual o recurrente que convenga revisar. Máximo 200 palabras. Sin datos conectados, indica exactamente qué falta por conectar."
+    },
+    {
+      "id": "facturas-cobros",
+      "schedule": "0 9 * * 2",
+      "enabled": true,
+      "category": "finanzas",
+      "prompt": "Revisa cobros pendientes según la fuente de ingresos/facturación de context/03_DATOS.md. Lista facturas vencidas o próximas a vencer y prepara borradores de recordatorio de cobro (tono de context/02_REGLAS_DE_ORO.md) para aprobación del piloto. Nunca ejecutes cobros ni envíes mensajes directamente."
+    },
+    {
+      "id": "pulso-metrica-norte",
+      "schedule": "0 14 * * 1-5",
+      "enabled": false,
+      "category": "finanzas",
+      "$requires": "Fuente de ingresos conectada (Stripe/Polar/CRM) en context/03_DATOS.md",
+      "prompt": "Consulta el valor actual de la métrica norte definida en context/01_ESTRATEGIA.md en su fuente real. Si se desvía >10% de la trayectoria hacia el objetivo de 90 días, envía alerta con causa probable y una acción correctiva. Si va en línea, responde solo: 'Métrica norte en línea: {valor}'."
+    },
+    {
+      "id": "analisis-competencia",
+      "schedule": "0 7 * * 3",
+      "enabled": true,
+      "category": "mercado",
+      "prompt": "Análisis semanal de competencia: revisa novedades de los competidores definidos en context/00_EMPRESA.md (precios, features, audiencia, lanzamientos). Resume solo lo accionable para nuestra estrategia (context/01_ESTRATEGIA.md) en <200 palabras. Si los competidores aún no están definidos, dilo en una línea. Si no hay nada relevante, dilo en una línea."
+    },
+    {
+      "id": "oportunidades-mercado",
+      "schedule": "0 7 * * 4",
+      "enabled": true,
+      "category": "mercado",
+      "prompt": "Detección de oportunidades: según el sector y el ICP de context/00_EMPRESA.md, busca en la web tendencias, cambios regulatorios o necesidades emergentes de la última semana. Presenta máximo 2 oportunidades con: evidencia, encaje con nuestra oferta y primer paso concreto. Cero especulación sin fuente."
+    },
+    {
+      "id": "ideas-contenido",
+      "schedule": "0 7 * * 5",
+      "enabled": true,
+      "category": "marketing",
+      "prompt": "Genera 5 ideas de contenido para la semana próxima según la oferta y el ICP definidos en context/00_EMPRESA.md. Para cada idea: título, canal, ángulo y primera línea. Respeta el tono y las palabras prohibidas de context/02_REGLAS_DE_ORO.md."
+    },
+    {
+      "id": "agenda-manana",
+      "schedule": "0 19 * * *",
+      "enabled": false,
+      "category": "operacion",
+      "$requires": "Google Calendar conectado",
+      "prompt": "Consulta el calendario de mañana y resume: eventos, con quién, y qué preparación necesita cada uno (contexto del cliente desde la fuente CRM de context/03_DATOS.md si existe). Máximo 150 palabras."
+    },
+    {
+      "id": "inbox-resumen",
+      "schedule": "0 8,16 * * 1-5",
+      "enabled": false,
+      "category": "operacion",
+      "$requires": "Gmail conectado",
+      "prompt": "Resume los emails no leídos relevantes para el negocio: quién, qué pide, urgencia. Propón borrador de respuesta solo para los críticos (aprobación del piloto obligatoria antes de enviar). Ignora newsletters y spam."
+    },
+    {
+      "id": "salud-sistema",
+      "schedule": "0 2 * * 1",
+      "enabled": true,
+      "category": "sistema",
+      "prompt": "Chequeo semanal del sistema: ejecuta cd agent-server && npx tsx scripts/status.ts, verifica conectividad con Supabase y Neon, revisa errores en logs recientes y dependencias desactualizadas críticas en los package.json. Reporta en markdown con indicadores ✅/⚠️/🔴 y la acción recomendada para cada ⚠️/🔴."
+    },
+    {
+      "id": "limpieza-memoria",
+      "schedule": "0 3 1 * *",
+      "enabled": true,
+      "category": "sistema",
+      "prompt": "Mantenimiento mensual de memoria: revisa las memorias del agente y context/04_APRENDIZAJES.md. Consolida entradas duplicadas, marca [OBSOLETO] lo que ya no aplique y verifica que las reglas derivadas de errores sigan reflejadas en context/02_REGLAS_DE_ORO.md. Reporta qué cambió."
+    },
+    {
+      "id": "kpi-mensual",
+      "schedule": "0 8 1 * *",
+      "enabled": true,
+      "category": "inteligencia",
+      "prompt": "Informe mensual: evolución de la métrica norte durante el mes, ingresos/gastos totales, progreso de los 3 objetivos del trimestre de context/01_ESTRATEGIA.md, y las 3 decisiones más importantes a tomar este mes. Formato ejecutivo, <300 palabras, solo datos de fuentes reales."
+    },
+    {
+      "id": "backup-contexto",
+      "schedule": "0 4 * * 0",
+      "enabled": true,
+      "category": "sistema",
+      "prompt": "Copia de seguridad semanal de la Capa 1: crea una copia fechada de context/*.md en context/.backups/{YYYY-MM-DD}/ y compárala con el backup anterior. Reporta en 3 líneas qué cambió en el contexto esta semana. Si no hubo ningún cambio en 2+ semanas, advierte que el contexto puede estar muriendo (contexto vivo = sistema vivo)."
+    }
+  ]
+}

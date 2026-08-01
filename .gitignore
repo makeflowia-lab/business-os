@@ -1,0 +1,49 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Node
+node_modules/
+
+# Env
+.env
+.env.local
+.env*.local
+# Snippets de entorno con tokens reales (p. ej. agent-server/env-snippets/socialflow.env)
+agent-server/env-snippets/
+*.env
+
+# Vercel
+.vercel
+
+# Build artifacts
+.next/
+dist/
+*.tsbuildinfo
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Claude MCP config (contains local paths)
+.mcp.json
+
+# Agent server runtime
+# OJO: anclados con "/" inicial a propósito. Sin anclar, "store/" también
+# excluía código fuente (finance-os/src/features/*/store/), y el proyecto no
+# compilaba tras clonarlo.
+/agent-server/store/
+/agent-server/workspace/
+*.log
+*.pid
+
+# Large media
+*.mp4
+*.mov
+
+# Proyecto externo que se mezcló aquí por error en el pasado — nunca volver a mezclarlo.
+/multiatlas-studio/

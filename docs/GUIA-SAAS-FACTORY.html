@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Paso a Paso de SaaS-Factory — De la Idea a Producción</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --border:#2a3344;
+    --text:#e6edf3; --muted:#9aa7b5; --accent:#58a6ff; --accent2:#3fb950;
+    --warn:#d29922; --code:#1f2733;
+    --radius:12px; --maxw:880px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:16px;}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{display:flex; max-width:1240px; margin:0 auto}
+  .sidebar{width:300px; flex-shrink:0; position:sticky; top:0; height:100vh; overflow-y:auto;
+    padding:28px 18px; border-right:1px solid var(--border); background:var(--panel)}
+  .content{flex:1; min-width:0; padding:40px 48px; max-width:var(--maxw); margin:0 auto}
+  .brand{font-weight:700; font-size:15px; letter-spacing:.3px; margin-bottom:4px}
+  .brand .em{font-size:22px}
+  .sub{color:var(--muted); font-size:12.5px; margin-bottom:22px}
+  .toc a{display:block; color:var(--muted); font-size:13.5px; padding:6px 10px; border-radius:8px; margin:1px 0}
+  .toc a:hover{background:var(--panel2); color:var(--text); text-decoration:none}
+  .toc a.lvl2{padding-left:24px; font-size:12.5px}
+  .toc .grp{margin:16px 0 4px; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#6b7785; padding-left:10px; font-weight:700}
+  h1{font-size:30px; line-height:1.25; margin:0 0 8px}
+  h2{font-size:23px; margin:46px 0 14px; padding-top:14px; border-top:1px solid var(--border); scroll-margin-top:20px}
+  h2.phase{color:#fff; background:linear-gradient(135deg,#1f6feb33,#3fb95022); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-top:48px}
+  h3{font-size:18px; margin:30px 0 10px; scroll-margin-top:20px}
+  h4{font-size:15px; margin:20px 0 8px; color:var(--muted)}
+  .lead{color:var(--muted); font-size:17px; border-left:3px solid var(--accent); padding:4px 0 4px 16px; margin:18px 0}
+  .meta{color:var(--muted); font-size:14px; margin-bottom:8px}
+  code{background:var(--code); padding:2px 6px; border-radius:5px; font-size:13.5px; font-family:"SF Mono",Consolas,Monaco,monospace; color:#a5d6ff}
+  pre{background:var(--code); border:1px solid var(--border); border-radius:10px; padding:16px; overflow-x:auto; margin:14px 0}
+  pre code{background:none; padding:0; color:#c9d1d9; display:block; line-height:1.55}
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px}
+  th,td{border:1px solid var(--border); padding:10px 12px; text-align:left; vertical-align:top}
+  th{background:var(--panel2); font-weight:600}
+  tr:nth-child(even) td{background:#12161e}
+  .box{border-radius:10px; padding:14px 16px; margin:16px 0; border:1px solid var(--border); font-size:14.5px}
+  .box.tip{background:#13261a; border-color:#1f5132}
+  .box.warn{background:#2a210d; border-color:#5c4410}
+  .box.check{background:#0f2233; border-color:#1a4d6e}
+  .box b{color:var(--text)}
+  blockquote{margin:16px 0; padding:10px 16px; border-left:3px solid var(--accent2); background:var(--panel); border-radius:0 8px 8px 0}
+  ul,ol{padding-left:22px} li{margin:6px 0}
+  input[type=checkbox]{margin-right:6px; transform:scale(1.15)}
+  hr{border:none; border-top:1px solid var(--border); margin:36px 0}
+  .foot{color:var(--muted); font-size:13px; font-style:italic; text-align:center; margin-top:30px}
+  #bar{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:50; transition:width .1s}
+  .menu-btn{display:none}
+  @media(max-width:920px){
+    .sidebar{position:fixed; left:-320px; z-index:40; transition:left .25s; box-shadow:0 0 40px #000}
+    .sidebar.open{left:0}
+    .content{padding:64px 20px 40px}
+    .menu-btn{display:block; position:fixed; top:12px; left:12px; z-index:45; background:var(--accent); color:#06101f; border:none; border-radius:8px; padding:8px 14px; font-weight:700; font-size:14px; cursor:pointer}
+    h1{font-size:25px}
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<button class="menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Índice</button>
+<div class="wrap">
+  <nav class="sidebar">
+    <div class="brand"><span class="em">🏭</span> Paso a Paso · SaaS-Factory</div>
+    <div class="sub">De la Idea a Producción (End-to-End)</div>
+    <div class="toc">
+      <a href="#idea-fondo">La idea de fondo</a>
+      <div class="grp">Fase 1 · La Idea</div>
+      <a href="#instala" class="lvl2">Instalar la fábrica</a>
+      <a href="#newapp" class="lvl2">Definir con /new-app</a>
+      <div class="grp">Fase 2 · Desarrollo</div>
+      <a href="#cyborg" class="lvl2">Encender los MCPs</a>
+      <a href="#bucle" class="lvl2">El bucle agéntico</a>
+      <a href="#prueba-mcp" class="lvl2">Probar el MCP</a>
+      <div class="grp">Fase 3 · GitHub</div>
+      <a href="#github" class="lvl2">Subir a GitHub</a>
+      <div class="grp">Fase 4 · Producción</div>
+      <a href="#vercel" class="lvl2">Desplegar en Vercel</a>
+      <div class="grp">Cierre</div>
+      <a href="#ciclo">El ciclo completo</a>
+      <a href="#ayuda">Si te atascas</a>
+      <a href="#checklist">Checklist end-to-end</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <h1>🏭 Guía Paso a Paso de SaaS-Factory</h1>
+    <p class="lead">El proceso completo, sin saltos, para que lo puedas replicar tú mismo. Vamos a construir un ejemplo sencillo de verdad y llevarlo hasta producción.</p>
+    <p class="meta">🎯 La promesa: de la idea al despliegue siguiendo pasos numerados. Si lo haces en orden, sale.</p>
+
+    <h2 id="idea-fondo">0. La idea de fondo (en 30 segundos)</h2>
+    <p>SaaS-Factory es una <b>fábrica de software</b>. La analogía es la Tesla Factory: lo importante no es el coche, es <b>la máquina que construye el coche</b>.</p>
+    <ul>
+      <li>Tú decides <b>QUÉ</b> construir.</li>
+      <li>La fábrica (Claude Code + un stack fijo + herramientas que <i>ven</i> el código) decide <b>CÓMO</b>.</li>
+      <li>Un solo stack perfeccionado ("Golden Path"): <b>Next.js 16 + React 19 + Tailwind + Supabase + Vercel</b>. Sin decisiones técnicas que te paralicen.</li>
+    </ul>
+    <p>El flujo entero es:</p>
+    <pre><code>Idea  →  saas-factory  →  /new-app  →  bucle agéntico (construir)  →  GitHub  →  Vercel  →  🚀</code></pre>
+    <div class="box tip">📌 <b>Ejemplo que usaremos:</b> una app para que una <b>peluquería</b> gestione sus citas. Sencilla, clara, replicable.</div>
+
+    <h2 class="phase" id="instala">FASE 1 — La Idea (definición rápida con IA)</h2>
+    <p>No necesitas un documento de 40 páginas. Necesitas claridad en 7 respuestas. Pero antes, instala la fábrica.</p>
+    <h3>1.1 — Instala SaaS-Factory una sola vez</h3>
+    <ol>
+      <li>Clona el repositorio de la fábrica:
+        <pre><code>git clone https://github.com/daniel-carreon/saas-factory-setup.git
+cd saas-factory-setup</code></pre>
+      </li>
+      <li>Abre Claude Code y pídele que configure el atajo:
+        <pre><code>claude .</code></pre>
+        <blockquote>"Configura el alias <code>saas-factory</code> en mi terminal."</blockquote>
+        Claude detecta tu sistema y crea el atajo. ¿Qué hace? <b>Copia toda la infraestructura de la fábrica</b> (el cerebro <code>CLAUDE.md</code>, los comandos, los MCPs, el código base) a la carpeta donde estés.
+      </li>
+    </ol>
+    <ul>
+      <li>🍎🐧 <b>Mac/Linux:</b> el alias es <code>cp -r .../saas-factory/. .</code></li>
+      <li>🪟 <b>Windows (PowerShell):</b> en vez de alias, copiarás la carpeta <code>saas-factory\</code> a tu proyecto nuevo. Pídeselo a Claude: <i>"Estoy en Windows con PowerShell, dame el equivalente al alias saas-factory."</i></li>
+    </ul>
+
+    <h3 id="newapp">1.2 — Define la idea con la IA (comando <code>/new-app</code>)</h3>
+    <p>Crea la carpeta de tu proyecto y mete la fábrica dentro:</p>
+    <pre><code>mkdir peluqueria-citas
+cd peluqueria-citas
+saas-factory          # (o el equivalente en Windows)</code></pre>
+    <p>Abre Claude Code y lanza el comando de definición:</p>
+    <pre><code>claude .</code></pre>
+    <pre><code>/new-app</code></pre>
+    <p>Ahora Claude actúa como un <b>Consultor de Negocio Senior</b> y te entrevista <b>una pregunta a la vez</b>. No pide código: extrae la lógica de negocio. Las 7 preguntas:</p>
+    <table>
+      <tr><th>#</th><th>Pregunta</th><th>Ejemplo (peluquería)</th></tr>
+      <tr><td>1</td><td><b>El Dolor</b> — ¿qué proceso está roto?</td><td>"Pierden citas porque las apuntan en un cuaderno y se solapan."</td></tr>
+      <tr><td>2</td><td><b>El Costo</b> — ¿cuánto cuesta?</td><td>"2–3 huecos vacíos al día por mala gestión."</td></tr>
+      <tr><td>3</td><td><b>La Solución</b> — en una frase</td><td>"Una agenda online de citas para peluquerías pequeñas."</td></tr>
+      <tr><td>4</td><td><b>El Flujo</b> — paso a paso</td><td>"Cliente elige servicio → ve huecos libres → reserva → recibe confirmación."</td></tr>
+      <tr><td>5</td><td><b>El Usuario</b> — el rol exacto</td><td>"La dueña de la peluquería que gestiona la agenda."</td></tr>
+      <tr><td>6</td><td><b>Los Datos</b> — qué entra / qué sale</td><td>"Entra: servicio, fecha, cliente. Sale: agenda del día, recordatorios."</td></tr>
+      <tr><td>7</td><td><b>El Éxito (KPI)</b> — resultado medible</td><td>"Cero solapamientos y reservar en menos de 1 minuto."</td></tr>
+    </table>
+    <div class="box tip">💡 <b>Responde concreto.</b> Si dices algo vago, la IA repregunta. Cuanto mejor respondas, mejor sale el resultado.</div>
+    <div class="box check"><b>Resultado de esta fase:</b> la IA genera <code>BUSINESS_LOGIC.md</code> en la raíz: la especificación técnica completa (features, tablas de Supabase sugeridas, próximos pasos). <b>Léelo y apruébalo</b> antes de seguir.</div>
+
+    <h2 class="phase" id="cyborg">FASE 2 — El Desarrollo (el bucle agéntico)</h2>
+    <p>Ya tienes el QUÉ (<code>BUSINESS_LOGIC.md</code>). Ahora la fábrica construye el CÓMO.</p>
+    <h3>2.1 — Instala y enciende el "Cyborg" (los MCPs)</h3>
+    <p>Lo que hace especial a esta fábrica es que la IA <b>ve</b> lo que construye, no adivina. Tres herramientas (MCPs):</p>
+    <table>
+      <tr><th>MCP</th><th>Rol</th><th>Superpoder</th></tr>
+      <tr><td>🧠 <b>Next.js DevTools</b></td><td>Control de Calidad</td><td>Lee errores y logs en tiempo real</td></tr>
+      <tr><td>👁️ <b>Playwright</b></td><td>Los Ojos</td><td>Captura la pantalla y valida la UI visualmente</td></tr>
+      <tr><td>🖐️ <b>Supabase</b></td><td>Las Manos</td><td>Ejecuta SQL y migraciones en tu base de datos</td></tr>
+    </table>
+    <p>Arranca todo:</p>
+    <pre><code>npm install
+cp .env.local.example .env.local      # añade tus credenciales de Supabase
+npm run dev</code></pre>
+    <p>Busca en la salida la línea que confirma el MCP activo:</p>
+    <pre><code>- MCP Server: http://localhost:3000/_next/mcp ✓</code></pre>
+    <div class="box check">🔎 <b>Checkpoint:</b> ¿ves esa línea? Entonces la IA podrá <i>ver</i> los errores. <b>Sin MCP, la IA adivina; con MCP, ve exactamente qué está roto y por qué.</b></div>
+
+    <h3 id="bucle">2.2 — Dale al bucle agéntico</h3>
+    <p>En otra terminal, abre Claude Code y dale la orden de construir:</p>
+    <pre><code>claude .</code></pre>
+    <pre><code>Implementa las features según BUSINESS_LOGIC.md</code></pre>
+    <p>Lo que pasa por dentro (el <b>bucle agéntico Blueprint</b>) — y por qué funciona:</p>
+    <ol>
+      <li><b>Delimitar:</b> divide el trabajo en <b>FASES</b> (no en mil subtareas de golpe). Ej: 1) Base de datos, 2) Autenticación, 3) Agenda, 4) Reservas.</li>
+      <li><b>Mapear:</b> <i>antes</i> de cada fase, explora el contexto real (qué tablas existen, qué código hay). No planifica sobre suposiciones.</li>
+      <li><b>Ejecutar:</b> construye usando los MCPs cuando hace falta — escribe código, mira errores con el MCP de Next.js, valida la pantalla con Playwright, crea tablas con Supabase.</li>
+      <li><b>Auto-Blindaje:</b> si aparece un error, lo arregla, lo prueba <b>y lo documenta</b>. ¿La gracia? El mismo error <b>nunca vuelve a ocurrir</b>.</li>
+      <li><b>Transicionar:</b> pasa a la siguiente fase con el contexto ya actualizado.</li>
+    </ol>
+    <div class="box tip">💡 <b>Tu papel aquí:</b> eres el "Control Room". La IA construye; tú validas en el navegador (<code>localhost:3000</code>) que la peluquería puede de verdad reservar una cita. Si algo no te gusta, se lo dices y ajusta.</div>
+
+    <h3 id="prueba-mcp">2.3 — Prueba que el MCP funciona (truco de confianza)</h3>
+    <p>Si dudas de que la IA esté <i>viendo</i> el código, rompe algo a propósito:</p>
+    <pre><code>// src/app/page.tsx
+const roto = undefined.foo  // 💥</code></pre>
+    <p>Con el MCP activo, la IA detecta al instante:</p>
+    <pre><code>TypeError: Cannot read property 'foo' of undefined  at Home (page.tsx:2)</code></pre>
+    <p>Deshaz el cambio y sigue. Ahora confías en que ve lo que pasa.</p>
+
+    <h2 class="phase" id="github">FASE 3 — Subir a GitHub</h2>
+    <p>Cuando tu app ya hace lo que prometiste (reservar citas sin solapamientos), la subes.</p>
+    <ol>
+      <li>Crea un repositorio vacío en <a href="https://github.com" target="_blank">github.com</a> (botón <b>New repository</b>). No marques "add README".</li>
+      <li>En la terminal, dentro de tu proyecto:
+        <pre><code>git init
+git add .
+git commit -m "Primera versión: agenda de citas para peluquería"
+git branch -M main
+git remote add origin https://github.com/TU-USUARIO/peluqueria-citas.git
+git push -u origin main</code></pre>
+      </li>
+    </ol>
+    <div class="box warn">⚠️ <b>Antes de subir:</b> asegúrate de que <code>.env.local</code> está en <code>.gitignore</code> (la fábrica ya lo trae así). <b>Nunca subas tus claves de Supabase a GitHub.</b></div>
+    <blockquote>💡 También puedes pedírselo a Claude: <i>"Sube este proyecto a un repo nuevo de GitHub llamado peluqueria-citas."</i> y lo hace por ti.</blockquote>
+
+    <h2 class="phase" id="vercel">FASE 4 — Desplegar en Vercel (producción)</h2>
+    <ol>
+      <li>Entra en <a href="https://vercel.com" target="_blank">vercel.com</a> e inicia sesión con tu cuenta de GitHub.</li>
+      <li><b>Add New → Project</b> → importa el repositorio <code>peluqueria-citas</code>.</li>
+      <li>Vercel detecta que es Next.js automáticamente. No toques la configuración de build.</li>
+      <li>Abre <b>Environment Variables</b> y añade las mismas que tienes en <code>.env.local</code>:
+        <ul>
+          <li><code>NEXT_PUBLIC_SUPABASE_URL</code></li>
+          <li><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></li>
+          <li><code>SUPABASE_SERVICE_ROLE_KEY</code></li>
+        </ul>
+      </li>
+      <li>Pulsa <b>Deploy</b>. En 1–2 minutos tienes una URL pública (<code>https://peluqueria-citas.vercel.app</code>).</li>
+    </ol>
+    <div class="box warn"><b>Último ajuste (importante):</b> vuelve a Supabase → <b>Authentication → URL Configuration</b> y añade tu URL de Vercel a las "Redirect URLs". Si no, el login fallará en producción.</div>
+    <div class="box check">🔎 <b>Checkpoint final:</b> abre la URL de Vercel en el móvil. Si puedes reservar una cita de prueba, <b>estás en producción.</b> 🎉</div>
+
+    <hr>
+    <h2 id="ciclo">🔁 El ciclo completo, de un vistazo</h2>
+    <pre><code>1. Idea         →  mkdir + saas-factory          (copias la fábrica)
+2. Definir      →  /new-app                       (genera BUSINESS_LOGIC.md)
+3. Construir    →  "Implementa según BUSINESS_LOGIC.md"  (bucle agéntico + MCPs)
+4. Validar      →  localhost:3000                 (tú pruebas que funciona)
+5. Subir        →  git push                       (a GitHub)
+6. Desplegar    →  Vercel import + deploy          (URL pública)
+7. 🚀</code></pre>
+
+    <h2 id="ayuda">🆘 Si te atascas</h2>
+    <p>Como en Business OS, <b>tu soporte es la propia IA</b>. Dentro de Claude Code:</p>
+    <ul>
+      <li><i>"El deploy en Vercel falló con este log: [pega]. ¿Qué falta?"</i></li>
+      <li><i>"Quiero añadir recordatorios por email a las citas."</i></li>
+      <li><i>"La pantalla de reservas no se ve bien en móvil, arréglala."</i></li>
+    </ul>
+    <p>Y recuerda el <b>Auto-Blindaje</b>: cada error que resuelves queda documentado en el proyecto. Tu fábrica se vuelve más fuerte con cada fallo.</p>
+
+    <h2 id="checklist">✅ Checklist End-to-End</h2>
+    <ul>
+      <li><input type="checkbox"> Fábrica instalada (alias <code>saas-factory</code> o equivalente Windows).</li>
+      <li><input type="checkbox"> Proyecto creado y <code>saas-factory</code> ejecutado dentro.</li>
+      <li><input type="checkbox"> <code>/new-app</code> completado → <code>BUSINESS_LOGIC.md</code> generado y aprobado.</li>
+      <li><input type="checkbox"> <code>npm run dev</code> con la línea <code>MCP Server ... ✓</code> visible.</li>
+      <li><input type="checkbox"> Features construidas con el bucle agéntico y validadas en el navegador.</li>
+      <li><input type="checkbox"> Repo subido a GitHub (sin claves).</li>
+      <li><input type="checkbox"> Desplegado en Vercel con las variables de entorno.</li>
+      <li><input type="checkbox"> URLs de redirección añadidas en Supabase.</li>
+      <li><input type="checkbox"> Probado en producción desde el móvil.</li>
+    </ul>
+    <div class="box check"><b>Si marcaste todo: fuiste de la idea a producción tú solo. Eso es replicable.</b></div>
+
+    <p class="foot">Guía Paso a Paso de SaaS-Factory · "De la idea a producción en minutos, no en meses."</p>
+  </main>
+</div>
+<script>
+  const bar=document.getElementById('bar');
+  const links=[...document.querySelectorAll('.toc a')];
+  const targets=links.map(a=>document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+  function onScroll(){
+    const h=document.documentElement;
+    const sc=h.scrollTop/(h.scrollHeight-h.clientHeight);
+    bar.style.width=(sc*100)+'%';
+    let cur=null;
+    for(const t of targets){ if(t.getBoundingClientRect().top<120) cur=t; }
+    links.forEach(a=>a.style.background='');
+    if(cur){ const l=links.find(a=>a.getAttribute('href')==='#'+cur.id); if(l) l.style.background='var(--panel2)'; }
+  }
+  document.addEventListener('scroll',onScroll); onScroll();
+  document.querySelectorAll('.toc a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.sidebar').classList.remove('open')));
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Business OS — Manual de Usuario</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; color: #0f1b24; margin: 0; font-size: 11.5pt; line-height: 1.55; }
+  h1, h2, h3 { color: #0f1b24; line-height: 1.2; }
+  h1 { font-size: 26pt; letter-spacing: 0.5px; }
+  h2 { font-size: 17pt; border-bottom: 3px solid #0891b2; padding-bottom: 6px; margin-top: 0; }
+  h3 { font-size: 12.5pt; color: #0e7490; margin-bottom: 4px; }
+  p { margin: 6px 0; }
+  .portada { height: 250mm; display: flex; flex-direction: column; justify-content: center; text-align: center; page-break-after: always; }
+  .portada .logo { font-size: 44pt; font-weight: 800; color: #0891b2; letter-spacing: 6px; }
+  .portada .sub { font-size: 14pt; color: #55707d; margin-top: 8px; }
+  .portada .meta { margin-top: 60px; font-size: 10pt; color: #55707d; }
+  .cap { page-break-before: always; }
+  .sub { color: #55707d; font-style: italic; margin-top: 0; }
+  img.captura { width: 100%; border: 1.5px solid #8fa6b0; border-radius: 4px; margin: 10px 0 4px; }
+  .pie-img { font-size: 8.5pt; color: #55707d; text-align: center; margin-top: 0; }
+  .caja { border: 1.5px solid #8fa6b0; border-left: 5px solid #0891b2; background: #f4f9fb; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+  .caja.ambar { border-left-color: #d97706; background: #fdf8ef; }
+  .caja.roja { border-left-color: #dc2626; background: #fef5f5; }
+  .caja b:first-child { color: #0e7490; }
+  .caja.ambar b:first-child { color: #b45309; }
+  .caja.roja b:first-child { color: #b91c1c; }
+  code, .cmd { font-family: 'Cascadia Mono', Consolas, monospace; font-size: 9.5pt; background: #eef4f6; border: 1px solid #d3dfe4; border-radius: 3px; padding: 0 4px; }
+  pre.cmd { display: block; padding: 8px 12px; margin: 8px 0; white-space: pre-wrap; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 10pt; }
+  th { background: #0891b2; color: #fff; text-align: left; padding: 6px 9px; }
+  td { border: 1px solid #bfd0d7; padding: 5px 9px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f4f9fb; }
+  ul, ol { margin: 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  .indice td { border: none; border-bottom: 1px dotted #bfd0d7; }
+  .c { color: #0e7490; font-weight: 700; }
+  .a { color: #b45309; font-weight: 700; }
+  .r { color: #b91c1c; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ PORTADA ═══════════════ -->
+<div class="portada">
+  <div class="logo">BUSINESS OS</div>
+  <div class="sub">Manual de Usuario · El sistema operativo de negocio autoconfigurable</div>
+  <div class="meta">
+    Repositorio: github.com/makeflowia-lab/business-os · Agosto 2026<br>
+    Incluye: consola JARVIS (12 módulos) · agente con Telegram y voz · crons · dashboards
+  </div>
+</div>
+
+<!-- ═══════════════ ÍNDICE ═══════════════ -->
+<h2>Índice</h2>
+<table class="indice">
+  <tr><td>1. ¿Qué es el Business OS?</td></tr>
+  <tr><td>2. Instalación y arranque</td></tr>
+  <tr><td>3. Encender el sistema (el onboarding)</td></tr>
+  <tr><td>4. La barra JARVIS — órdenes con texto o voz</td></tr>
+  <tr><td>5. Los 12 módulos de la consola, uno por uno</td></tr>
+  <tr><td>6. El agente de Telegram (agent-server)</td></tr>
+  <tr><td>7. Mission Control y Finance OS</td></tr>
+  <tr><td>8. Integraciones opcionales pendientes de credenciales</td></tr>
+  <tr><td>9. Problemas comunes y su solución</td></tr>
+</table>
+
+<!-- ═══════════════ 1 ═══════════════ -->
+<div class="cap">
+<h2>1 · ¿Qué es el Business OS?</h2>
+<p>El Business OS es un <b>sistema operativo para tu negocio</b>: un cerebro de inteligencia artificial que conoce tu empresa, responde con datos reales, propone decisiones, ejecuta tareas aprobadas y trabaja solo en horarios programados. Le hablas en español normal — por la consola web, por Telegram o por voz.</p>
+<p>Llega <b>APAGADO a propósito</b>: es un "Ferrari esperando piloto", sin idea de negocio fija. Se enciende con una entrevista (capítulo 3) que lo configura para TU empresa — cualquier giro, cualquier tamaño.</p>
+
+<h3>Las cinco capas</h3>
+<table>
+  <tr><th>Capa</th><th>Qué es</th><th>Dónde vive</th></tr>
+  <tr><td><b>1 · Contexto</b></td><td>La verdad del negocio: identidad, estrategia, reglas de oro, aprendizajes</td><td>Carpeta <code>context/</code></td></tr>
+  <tr><td><b>2 · Datos</b></td><td>Mapa de qué está conectado y dónde consultar cada dato</td><td><code>context/03_DATOS.md</code></td></tr>
+  <tr><td><b>3 · Cerebro</b></td><td>Enterprise Brain: 9 agentes especializados + motores de decisión sobre Postgres</td><td><code>business-os/</code> — la consola JARVIS</td></tr>
+  <tr><td><b>4 · Automatización</b></td><td>Agente con memoria, crons programados y bot de Telegram</td><td><code>agent-server/</code></td></tr>
+  <tr><td><b>5 · Build</b></td><td>Con las capas anteriores vivas, construyes SOBRE el negocio</td><td>Tus proyectos</td></tr>
+</table>
+<div class="caja">
+<b>Por dónde empezar.</b> El archivo <code>ENCENDIDO.md</code> en la raíz del repo es la guía de arranque del piloto, y <code>docs/SETUP_PROMPT.md</code> el setup técnico guiado. Este manual los complementa con el "para qué sirve" de cada pieza.
+</div>
+</div>
+
+<!-- ═══════════════ 2 ═══════════════ -->
+<div class="cap">
+<h2>2 · Instalación y arranque</h2>
+<h3>Requisitos</h3>
+<ul>
+  <li>Node.js 20 o superior</li>
+  <li>Una base <b>Neon</b> (Postgres, gratis) para el cerebro</li>
+  <li><b>Claude Code CLI</b> instalado y con sesión iniciada (el agente lo usa como motor)</li>
+  <li>Una cuenta de Telegram (crear un bot toma 2 minutos con @BotFather)</li>
+</ul>
+
+<h3>Consola JARVIS (el cerebro)</h3>
+<pre class="cmd">cd business-os
+cp .env.example .env.local        # rellena DATABASE_URL (Neon) y OPENROUTER_API_KEY
+npm install
+npm run db:setup                  # crea el esquema y siembra los 9 agentes
+npm run dev                       # → http://localhost:3010</pre>
+<p>La primera compilación puede tardar 2–3 minutos. Espera a que la terminal diga <code>Ready</code>.</p>
+
+<h3>El bot del cerebro (opcional, recomendado)</h3>
+<pre class="cmd">cd business-os
+npm run bot</pre>
+<p>Es la consola en tu bolsillo vía Telegram, y su "latido" enciende en <span class="c">cian</span> el indicador "Bot + Scheduler + Centinela" del módulo Gobierno. Necesita <code>TELEGRAM_BOT_TOKEN</code> propio en <code>.env.local</code>.</p>
+
+<h3>El agente principal (capítulo 6)</h3>
+<pre class="cmd">cd agent-server
+cp .env.example .env              # rellena TELEGRAM_BOT_TOKEN y ALLOWED_CHAT_ID
+npm install
+npm run dev</pre>
+
+<div class="caja ambar">
+<b>Dos bots = dos tokens.</b> Si usas el bot del cerebro Y el agente principal, crea DOS bots distintos en @BotFather. Telegram solo permite una conexión por bot: con el mismo token se pelean por los mensajes.
+</div>
+<div class="caja ambar">
+<b>Para apagar:</b> <code>Ctrl+C</code> en cada terminal. Nunca uses <code>taskkill /IM node.exe</code> — mata todos los procesos de Node de la máquina.
+</div>
+</div>
+
+<!-- ═══════════════ 3 ═══════════════ -->
+<div class="cap">
+<h2>3 · Encender el sistema (el onboarding)</h2>
+<p>Mientras <code>context/00_EMPRESA.md</code> contenga marcadores <code>{{ASI:...}}</code>, el sistema está APAGADO: funciona, pero razona en genérico. Hay <b>dos llaves de encendido</b> complementarias:</p>
+<table>
+  <tr><th>Llave</th><th>Qué enciende</th><th>Cómo se usa</th></tr>
+  <tr><td><b>Skill <code>onboarding-empresa</code></b></td><td>La capa de contexto (capas 1–2) y los crons del agente</td><td>Abre Claude Code en la raíz del repo y di <i>"enciende el sistema"</i>. Te entrevista por bloques y rellena <code>context/*.md</code></td></tr>
+  <tr><td><b>Onboarding Ingestor</b> (módulo 12 de la consola)</td><td>El cerebro (capa 3): constitución, entidades, KPIs y automatizaciones</td><td>Desde la consola, responde la entrevista guiada (20–30 min, se puede pausar)</td></tr>
+</table>
+<p>El orden recomendado es el de la tabla. Al terminar ambas, el sistema queda ENCENDIDO para tu negocio y los crons pueden sembrarse (capítulo 6).</p>
+</div>
+
+<!-- ═══════════════ 4 ═══════════════ -->
+<div class="cap">
+<h2>4 · La barra JARVIS — órdenes con texto o voz</h2>
+<p>La franja superior <b>JARVIS ▸</b> está presente en todos los módulos de la consola. Escribe una orden en español y pulsa <b>EJECUTAR</b> (o Enter). El sistema decide solo si es una pregunta, un registro de datos, una regla de vigilancia o una tarea.</p>
+<h3>Ejemplos</h3>
+<ul>
+  <li><i>"¿cómo vamos?"</i> — resumen del estado del negocio</li>
+  <li><i>"registra ventas de hoy 4500"</i> — guarda el KPI</li>
+  <li><i>"si el MRR baja de 1000 avísame"</i> — crea una regla del Centinela</li>
+  <li><i>"prepara un reporte semanal para el equipo"</i> — encola una acción</li>
+</ul>
+<h3>Voz</h3>
+<ul>
+  <li><b>Micrófono</b> (o <code>Ctrl+J</code>): dicta una orden suelta.</li>
+  <li><b>MODO VOZ</b>: conversación continua — escucha, ejecuta, responde hablando y vuelve a escuchar.</li>
+  <li><b>Altavoz</b>: activa/desactiva las respuestas en voz alta.</li>
+</ul>
+</div>
+
+<!-- ═══════════════ 5. MÓDULOS ═══════════════ -->
+<div class="cap">
+<h2>5 · Los 12 módulos de la consola</h2>
+<p>Se navega con la barra lateral izquierda; el punto <span class="c">cian</span> inferior indica que la consola está en línea. Colores del tema: <span class="c">cian</span> = correcto, <span class="a">ámbar</span> = pendiente/aviso, <span class="r">rojo</span> = crítico.</p>
+
+<h3 style="margin-top:18px">5.1 · Núcleo (Cerebro)</h3>
+<p class="sub">La pantalla principal: la esfera holográfica, los contadores del sistema y la fundación del OS.</p>
+<img class="captura" src="manual-img/01-nucleo.png">
+<p class="pie-img">Recién instalado: la esfera "SIN CONSTITUCIÓN" y el botón FUNDAR EL BUSINESS OS — así se ve el estado APAGADO.</p>
+<p><b>Cómo usarlo:</b> es tu punto de partida. La primera vez, pulsa <b>FUNDAR EL BUSINESS OS</b> (te lleva al onboarding). Ya encendido, la esfera muestra el pulso del negocio y el ticker inferior la actividad reciente.</p>
+
+<h3 class="cap" style="margin-top:18px">5.2 · Agentes Especializados</h3>
+<p class="sub">"Nueve especialistas. Un solo cerebro. Todos conocen toda la empresa."</p>
+<img class="captura" src="manual-img/02-agentes.png">
+<p class="pie-img">El equipo directivo virtual: CEO, Finanzas, RRHH, Ventas, Operaciones, Marketing, Legal, Soporte y Analytics.</p>
+<p><b>Para qué sirve:</b> hablar con un director virtual del área que necesites. Cada agente responde desde su especialidad pero con el cerebro común: Finanzas sabe lo que pasó en Ventas.</p>
+<p><b>Cómo usarlo:</b> elige un agente y conversa. Al CFO: <i>"¿aguantamos 6 meses con la caja actual?"</i>; a Legal: <i>"redacta una cláusula de confidencialidad"</i> (siempre con revisión humana).</p>
+
+<h3 class="cap" style="margin-top:18px">5.3 · Decision Engine</h3>
+<p class="sub">"No responde: piensa. Analiza ventas, caja, capacidad, riesgos e historial antes de recomendar."</p>
+<img class="captura" src="manual-img/03-decisiones.png">
+<p class="pie-img">Cada decisión queda registrada con su análisis y recomendación.</p>
+<p><b>Cómo usarlo:</b> plantea la decisión (<i>"¿contrato o subcontrato?"</i>, <i>"¿subo precios 10%?"</i>). Recibes análisis, opciones y recomendación argumentada. La decisión final es tuya y queda archivada.</p>
+
+<h3 class="cap" style="margin-top:18px">5.4 · Telemetría (KPIs)</h3>
+<p class="sub">"Los signos vitales de la empresa — el núcleo los usa en cada decisión y el Centinela los vigila por umbral."</p>
+<img class="captura" src="manual-img/04-kpis.png">
+<p class="pie-img">Los indicadores clave, con su historial.</p>
+<p><b>Cómo usarlo:</b> registra valores por la barra (<i>"registra ventas de hoy 4500"</i>), por el módulo o por Telegram. El Centinela vigila umbrales: <i>"si las ventas semanales bajan de X, avísame"</i>.</p>
+
+<h3 class="cap" style="margin-top:18px">5.5 · Modelo de la Empresa</h3>
+<p class="sub">"El mapa vivo: personas, clientes, productos, proyectos, procesos, contratos… el núcleo razona sobre este modelo."</p>
+<img class="captura" src="manual-img/05-empresa.png">
+<p class="pie-img">El grafo de entidades: quién es quién y qué se relaciona con qué.</p>
+<p><b>Cómo usarlo:</b> díselo en natural — <i>"Juan trabaja en el Proyecto Alfa"</i> — por JARVIS o Telegram, y el grafo se conecta solo.</p>
+
+<h3 class="cap" style="margin-top:18px">5.6 · Knowledge Engine (Conocimiento)</h3>
+<p class="sub">"Todo lo que ingresa se convierte en conocimiento del núcleo: texto, notas, contratos, reportes, exportes CSV…"</p>
+<img class="captura" src="manual-img/06-conocimiento.png">
+<p class="pie-img">La biblioteca del cerebro.</p>
+<p><b>Cómo usarlo:</b> pega texto o sube archivos. Luego pregunta con normalidad: <i>"¿qué dice el contrato de X sobre la renovación?"</i>.</p>
+
+<h3 class="cap" style="margin-top:18px">5.7 · Automation Engine (Acciones)</h3>
+<p class="sub">"Cola de acciones: el sistema propone, tú apruebas, el motor ejecuta. Emails, reportes, briefs, convocatorias…"</p>
+<img class="captura" src="manual-img/07-acciones.png">
+<p class="pie-img">La cola de trabajo con el estado de cada acción.</p>
+<p><b>Cómo usarlo:</b> revisa y aprueba o rechaza. En Gobierno defines qué tipos se auto-ejecutan y cuáles siempre esperan tu visto bueno. Nada crítico sale sin aprobación.</p>
+
+<h3 class="cap" style="margin-top:18px">5.8 · Automatización (programadas)</h3>
+<p class="sub">"El gerente da instrucciones, el Business OS ejecuta."</p>
+<img class="captura" src="manual-img/08-automatizacion.png">
+<p class="pie-img">Instrucciones programadas y reglas del Centinela.</p>
+<p><b>Cómo usarlo:</b> crea programaciones hablando — <i>"todos los lunes a las 8 prepárame el resumen financiero"</i>. Aquí las ves, pausas o eliminas.</p>
+
+<h3 class="cap" style="margin-top:18px">5.9 · Gobierno</h3>
+<p class="sub">"Salud del sistema, políticas de ejecución y auditoría inmutable — nada falla en silencio, nada crítico sin tu aprobación."</p>
+<img class="captura" src="manual-img/09-gobierno.png">
+<p class="pie-img">Semáforo de salud, políticas de autonomía y registro de auditoría.</p>
+<ul>
+  <li><b>Salud:</b> si "Bot + Scheduler + Centinela" está en <span class="r">rojo</span>, arranca <code>npm run bot</code> (capítulo 2).</li>
+  <li><b>Políticas:</b> qué acciones se auto-ejecutan y el monto máximo sin aprobación. Vacío = TODO lo que implique dinero pide tu visto bueno.</li>
+  <li><b>Auditoría:</b> registro inmutable de todo lo que el sistema hizo.</li>
+</ul>
+
+<h3 class="cap" style="margin-top:18px">5.10 · Gestión de Equipo</h3>
+<p class="sub">"Por seguridad, el sistema asume que eres el único operador salvo que actives el modo Multi-Empleado."</p>
+<img class="captura" src="manual-img/10-equipo.png">
+<p class="pie-img">Control de operadores del sistema.</p>
+<p><b>Para qué sirve:</b> el OS nace de un solo piloto. Cuando quieras dar acceso a tu equipo, aquí se activa el modo Multi-Empleado.</p>
+
+<h3 class="cap" style="margin-top:18px">5.11 · Retorno del Sistema (ROI)</h3>
+<p class="sub">"Horas y dinero que el Business OS le devuelve a la empresa — estimaciones conservadoras y declaradas, no promesas."</p>
+<img class="captura" src="manual-img/11-roi.png">
+<p class="pie-img">Cuánto tiempo y dinero te ha ahorrado el sistema.</p>
+<p><b>Cómo usarlo:</b> entra de vez en cuando, o pregunta por chat: <i>"¿cuánto me has ahorrado este mes?"</i>.</p>
+
+<h3 class="cap" style="margin-top:18px">5.12 · Onboarding Ingestor</h3>
+<p class="sub">"El Business OS te entrevista y construye solo el gemelo digital de tu empresa: constitución, entidades, KPIs y automatizaciones."</p>
+<img class="captura" src="manual-img/12-onboarding.png">
+<p class="pie-img">La entrevista de encendido del cerebro.</p>
+<p><b>Cómo usarlo:</b> resérvale 20–30 minutos. Puedes pausar y continuar. Al terminar, el cerebro queda ENCENDIDO para tu negocio (ver capítulo 3).</p>
+</div>
+
+<!-- ═══════════════ 6 ═══════════════ -->
+<div class="cap">
+<h2>6 · El agente de Telegram (agent-server)</h2>
+<p>Además de la consola, el repo trae un <b>agente persistente</b> que corre en tu máquina: no es un chatbot — cada mensaje tuyo lanza el <b>Claude Code real</b> con tus skills y tu contexto. Le hablas por Telegram desde cualquier lugar.</p>
+<h3>Qué sabe hacer</h3>
+<ul>
+  <li><b>Texto y voz:</b> notas de voz entran (transcripción con Groq) y puede responder hablando (ElevenLabs). Ambas son opcionales.</li>
+  <li><b>Memoria:</b> aprende de ti con memoria persistente y búsqueda; <code>/memory</code> muestra qué recuerda, <code>/forget</code> lo olvida.</li>
+  <li><b>Crons:</b> tareas programadas que trabajan solas (briefing matinal, cierre del día, revisión semanal…). Se siembran con:
+  <pre class="cmd">cd agent-server
+npx tsx scripts/seed-crons.ts     # siembra los 16 crons del archivo automations/cronjobs-seed.json
+npx tsx src/schedule-cli.ts list  # verlos · pause/resume &lt;id&gt; para controlarlos</pre></li>
+  <li><b>Comandos útiles:</b> <code>/newchat</code> (conversación nueva), <code>/schedule</code> (ver crons), <code>/chatid</code> (tu ID para el .env).</li>
+</ul>
+<div class="caja">
+<b>Salud del agente.</b> <code>npx tsx scripts/status.ts</code> dentro de <code>agent-server</code> te dice qué está configurado y qué falta, con indicadores claros.
+</div>
+<div class="caja ambar">
+<b>Consumo.</b> Cada mensaje al agente y cada corrida de cron lanzan una sesión de Claude: gastan cuota de tu cuenta. Siembra los crons cuando el sistema ya esté encendido, y pausa los que no uses. Si se agota la cuota de un modelo, el scheduler reintenta con espera automática (15→30→60 min) sin perder el trabajo del día, y puedes fijar otro modelo para crons con <code>AGENT_MODEL</code> en el <code>.env</code>.
+</div>
+</div>
+
+<!-- ═══════════════ 7 ═══════════════ -->
+<div class="cap">
+<h2>7 · Mission Control y Finance OS</h2>
+<p>Dos dashboards opcionales incluidos en el repo. Ambos usan <b>Supabase</b> (crea un proyecto gratis y sigue <code>docs/SETUP_PROMPT.md</code>, secciones 3A y 3B, para crear sus tablas).</p>
+<table>
+  <tr><th>App</th><th>Qué es</th><th>Arranque</th></tr>
+  <tr><td><b>Mission Control</b></td><td>Tablero Kanban de tareas + chat con el agente + gestión de crons + calendario. Instalable como app en el celular (PWA)</td><td><code>cd Mission-Control && npm install && npm run dev</code> → puerto 3000</td></tr>
+  <tr><td><b>Finance OS</b></td><td>Finanzas: transacciones, gastos recurrentes, reportes y un agente CFO</td><td><code>cd finance-os && npm install && npm run dev</code></td></tr>
+</table>
+<div class="caja ambar">
+<b>Ojo con el plan gratuito de Supabase:</b> suspende proyectos inactivos tras unas semanas. Si un día estos dashboards no cargan, entra al panel de Supabase y reactiva (o recrea) el proyecto, y actualiza las claves en los <code>.env.local</code>.
+</div>
+</div>
+
+<!-- ═══════════════ 8 ═══════════════ -->
+<div class="cap">
+<h2>8 · Integraciones opcionales pendientes de credenciales</h2>
+<p>El código de estas integraciones ya está en el repo; solo esperan que pongas tus propias credenciales. El módulo Gobierno las marca en <span class="a">ámbar</span> — no son fallas.</p>
+<table>
+  <tr><th>Integración</th><th>Qué necesitas</th><th>Qué desbloquea</th></tr>
+  <tr><td>Google (Gmail/Drive)</td><td>Credenciales OAuth propias — guía paso a paso en <code>business-os/INTEGRACIONES.md</code></td><td>Resumen de inbox, agenda, importar Docs al cerebro</td></tr>
+  <tr><td>WhatsApp Business</td><td>App en Meta + verificación de negocio + credenciales Cloud API</td><td>Dar órdenes al OS por WhatsApp</td></tr>
+  <tr><td>Voz del agente</td><td>GROQ_API_KEY (gratis) y ELEVENLABS_API_KEY (nivel gratis)</td><td>Notas de voz de entrada y respuestas habladas en Telegram</td></tr>
+  <tr><td>Stripe / fuente de ingresos</td><td>Cuenta y claves</td><td>Que los crons financieros reporten MRR/ingresos reales</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════ 9 ═══════════════ -->
+<div class="cap">
+<h2>9 · Problemas comunes y su solución</h2>
+<table>
+  <tr><th>Síntoma</th><th>Causa probable</th><th>Solución</th></tr>
+  <tr><td>El navegador se queda cargando</td><td>El servidor no terminó de compilar o no está corriendo</td><td>Mira la terminal: espera el <code>Ready</code> o arranca la app (capítulo 2)</td></tr>
+  <tr><td>"Telegram rechazó el token" al arrancar el agente</td><td><code>TELEGRAM_BOT_TOKEN</code> sigue siendo el de ejemplo o es inválido</td><td>Crea tu bot con @BotFather y pega el token en <code>agent-server/.env</code></td></tr>
+  <tr><td>"Bot + Scheduler + Centinela" en rojo en Gobierno</td><td>No está corriendo <code>npm run bot</code></td><td>Arrancarlo; en un minuto el indicador se enciende</td></tr>
+  <tr><td>Los dos bots se roban los mensajes</td><td>El mismo token en agent-server y business-os</td><td>Un bot distinto (token distinto) para cada uno</td></tr>
+  <tr><td>El agente responde con error de límite</td><td>Se agotó la cuota de Claude</td><td>Esperar el restablecimiento; los crons reintentan solos con espera</td></tr>
+  <tr><td>El bot mezcla temas viejos</td><td>Sesión acumulada</td><td>Envíale <code>/newchat</code></td></tr>
+  <tr><td>Mission Control / Finance OS no cargan datos</td><td>Supabase sin configurar o proyecto suspendido</td><td>Capítulo 7 — crear/reactivar proyecto y actualizar claves</td></tr>
+  <tr><td>Primera carga lentísima</td><td>Compilación inicial de Next.js</td><td>Normal la primera vez; después vuela</td></tr>
+</table>
+
+<div class="caja roja">
+<b>Nunca hagas esto:</b> <code>taskkill /IM node.exe /F</code>. Mata TODOS los procesos de Node de la máquina. Cierra cada terminal con <code>Ctrl+C</code>.
+</div>
+
+<p style="margin-top:26px; color:#55707d; font-size:9pt; text-align:center;">Business OS · Manual de usuario · github.com/makeflowia-lab/business-os · Las capturas muestran el sistema recién instalado (estado APAGADO), tal como lo verás antes del onboarding.</p>
+</div>
+
+</body>
+</html>
